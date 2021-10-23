@@ -26,12 +26,12 @@ services:
     volumes:
       - ./user-management-service/app:/usr/src/app      
 
-  software-environment-registry-service:
-    build: ./software-environment-registry-service/
+  software-env-registry-service:
+    build: ./software-env-registry-service/
     ports:
-      - "8001:8000"
+      - "8002:8000"
     volumes:
-      - ./software-environment-registry-service/app:/usr/src/app  
+      - ./software-env-registry-service/app:/usr/src/app  
   
   vulnerablity-management-experience-service:
     build: ./vulnerablity-management-experience-service/
