@@ -32,6 +32,13 @@ services:
       - "8002:8000"
     volumes:
       - ./software-env-registry-service/app:/usr/src/app  
+
+  software-inventory-service:
+    build: ./software-inventory-service/
+    ports:
+      - "8003:8000"
+    volumes:
+      - ./software-inventory-service/app:/usr/src/app  
   
   vulnerablity-management-experience-service:
     build: ./vulnerablity-management-experience-service/
