@@ -54,6 +54,13 @@ services:
       - ./detector-integration-service/app:/usr/src/app
       - ./detector-integration-service/arf:/usr/src/arf
 
+  credentail-management-service:
+    build: ./credential-management-service/
+    ports:
+      - "8006:8000"
+    volumes:
+      - ./credential-management-service/app:/usr/src/app
+
   vulnerablity-management-experience-service:
     build: ./vulnerablity-management-experience-service/
     ports:
