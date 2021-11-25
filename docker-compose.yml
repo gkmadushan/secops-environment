@@ -12,6 +12,15 @@ services:
     volumes:
       - ./pgdata:/var/lib/postgresql/data
 
+  queue:
+    image: rabbitmq:3-management
+    restart: always
+    ports:
+      - 5672:5672
+      - 15672:15672
+    volumes:
+      - ./rabbitmq:/var/lib/rabbitmq
+
   adminer:
     image: adminer
     restart: always
@@ -38,6 +47,8 @@ services:
       - "8003:8000"
     volumes:
       - ./software-inventory-service/app:/usr/src/app
+    environment:
+      - LOG_LEVEL="info"
 
   issue-management-service:
     build: ./issue-management-service/
@@ -45,6 +56,13 @@ services:
       - "8004:8000"
     volumes:
       - ./issue-management-service/app:/usr/src/app
+
+  scheduler-service:
+    build: ./scheduler-service/
+    ports:
+      - "8007:8000"
+    volumes:
+      - ./scheduler-service/app:/usr/src/app
 
   detector-integration-service:
     build: ./detector-integration-service/
@@ -61,9 +79,17 @@ services:
     volumes:
       - ./credential-management-service/app:/usr/src/app
 
+  data-collector-service:
+    build: ./data-collector-service/
+    volumes:
+      - ./data-collector-service/app:/usr/src/app
+
   vulnerablity-management-experience-service:
     build: ./vulnerablity-management-experience-service/
     ports:
       - "8088:8000"
     volumes:
       - ./vulnerablity-management-experience-service/app:/usr/src/app
+    depends_on:
+      - queue
+      - db
