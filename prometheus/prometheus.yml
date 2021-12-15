@@ -1,0 +1,15 @@
+global:
+  scrape_interval:     15s 
+  external_labels:
+    monitor: 'fastapi-monitor'
+
+scrape_configs:
+  - job_name: 'prometheus'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['192.168.8.109:9090']
+
+  - job_name: 'fastapi'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['192.168.8.109:8088']
