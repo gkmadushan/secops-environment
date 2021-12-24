@@ -39,6 +39,14 @@ services:
     restart: always
     ports:
       - 9080:8080
+ 
+
+  notification-service:
+    build: ./notification-service/
+    volumes:
+      - ./notification-service/app:/usr/src/app
+    depends_on:
+      - queue
 
   user-management-service:
     build: ./user-management-service/
