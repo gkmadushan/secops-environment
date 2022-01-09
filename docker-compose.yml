@@ -2,24 +2,26 @@ version: "3.1"
 
 services:
   db:
-    image: postgres
+    image: postgres:13.5
     restart: always
-    ports:
-      - 5432:5432
+    # ports:
+    #   - 5432:5432
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: pswdrd123
     volumes:
       - ./pgdata:/var/lib/postgresql/data
+      - ./logs:/usr/src/logs
 
   queue:
     image: rabbitmq:3-management
     restart: always
     ports:
-      - 5672:5672
-      - 15672:15672
+    #   - 5672:5672
+      - 8872:15672
     volumes:
       - ./rabbitmq:/var/lib/rabbitmq
+      - ./logs:/usr/src/logs
 
   prometheus:
     image: prom/prometheus:v2.32.0-rc.1
@@ -45,6 +47,7 @@ services:
     build: ./notification-service/
     volumes:
       - ./notification-service/app:/usr/src/app
+      - ./logs:/usr/src/logs
     depends_on:
       - queue
 
@@ -54,6 +57,7 @@ services:
       - "8001:8000"
     volumes:
       - ./user-management-service/app:/usr/src/app
+      - ./logs:/usr/src/logs
 
   software-env-registry-service:
     build: ./software-env-registry-service/
@@ -61,6 +65,7 @@ services:
       - "8002:8000"
     volumes:
       - ./software-env-registry-service/app:/usr/src/app
+      - ./logs:/usr/src/logs
 
   software-inventory-service:
     build: ./software-inventory-service/
@@ -68,6 +73,7 @@ services:
       - "8003:8000"
     volumes:
       - ./software-inventory-service/app:/usr/src/app
+      - ./logs:/usr/src/logs
     environment:
       - LOG_LEVEL="info"
 
@@ -77,6 +83,7 @@ services:
       - "8004:8000"
     volumes:
       - ./issue-management-service/app:/usr/src/app
+      - ./logs:/usr/src/logs
 
   scheduler-service:
     build: ./scheduler-service/
@@ -84,6 +91,7 @@ services:
       - "8007:8000"
     volumes:
       - ./scheduler-service/app:/usr/src/app
+      - ./logs:/usr/src/logs
 
   detector-integration-service:
     build: ./detector-integration-service/
@@ -92,6 +100,7 @@ services:
     volumes:
       - ./detector-integration-service/app:/usr/src/app
       - ./detector-integration-service/arf:/usr/src/arf
+      - ./logs:/usr/src/logs
 
   credentail-management-service:
     build: ./credential-management-service/
@@ -99,6 +108,7 @@ services:
       - "8006:8000"
     volumes:
       - ./credential-management-service/app:/usr/src/app
+      - ./logs:/usr/src/logs
 
   knowledge-base:
     build: ./knowledge-base/
@@ -106,11 +116,13 @@ services:
       - "8008:8000"
     volumes:
       - ./knowledge-base/app:/usr/src/app
+      - ./logs:/usr/src/logs
 
   data-collector-service:
     build: ./data-collector-service/
     volumes:
       - ./data-collector-service/app:/usr/src/app
+      - ./logs:/usr/src/logs
     depends_on:
       - queue
       - db
@@ -121,6 +133,7 @@ services:
       - "8009:8000"
     volumes:
       - ./reporting-service/app:/usr/src/app
+      - ./logs:/usr/src/logs
 
   vulnerablity-management-experience-service:
     build: ./vulnerablity-management-experience-service/
@@ -128,6 +141,7 @@ services:
       - "8088:8000"
     volumes:
       - ./vulnerablity-management-experience-service/app:/usr/src/app
+      - ./logs:/usr/src/logs
     depends_on:
       - queue
       - db
