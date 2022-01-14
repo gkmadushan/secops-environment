@@ -145,3 +145,34 @@ services:
     depends_on:
       - queue
       - db
+
+  code-quality-analyzer:
+    image: sonarqube:latest
+    ports:
+      - "8180:9000"
+    environment:
+      - SONAR_ES_BOOTSTRAP_CHECKS_DISABLE=true   
+    volumes:
+      - ./sonar/data:/opt/sonarqube/data
+      - ./sonar/logs:/opt/sonarqube/logs
+      - ./sonar/extensions:/opt/sonarqube/extensions
+    networks:
+      - secops
+
+  sonar-scanner:
+    image: sonarsource/sonar-scanner-cli:4.4
+    environment:
+      - SONAR_LOGIN="admin"
+      - SONAR_PASSWORD="Madu1987"
+      - SONAR_HOST_URL="http://code-quality-analyzer:9000"
+      - SONAR_LOGIN="57e922d78c786c4b1701165aa984c7640b694cf1"
+    volumes:
+      - ./:/codebase
+    networks:
+      - secops
+
+networks:
+  secops:
+    name: secops-network
+    driver: host
+
